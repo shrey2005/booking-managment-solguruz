@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Popconfirm, Space } from "antd";
-import BookingFormModal from "./BookModal";  
+import moment from "moment";
+import BookingFormModal from "./BookModal";
 
 const BookingsPage = () => {
   const [bookings, setBookings] = useState(() => {
@@ -46,6 +47,13 @@ const BookingsPage = () => {
     {
       title: "Date & Time",
       dataIndex: "meetingDate",
+      render: (meetingDate) => {
+        return (
+          <div>
+            {meetingDate && moment(meetingDate).format("DD-MM-YYYY")}
+          </div>
+        );
+      }
     },
     {
       title: "Action",
@@ -65,7 +73,7 @@ const BookingsPage = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={() => setIsModalOpen(true)}>
+      <Button type="primary" onClick={() => { setIsModalOpen(true); setEditingBooking(null); }}>
         Add Booking
       </Button>
       <Table
@@ -79,6 +87,7 @@ const BookingsPage = () => {
         onCancel={() => setIsModalOpen(false)}
         onSubmit={handleAddOrUpdateBooking}
         initialValues={editingBooking}
+        existingBookings={bookings}
       />
     </div>
   );
